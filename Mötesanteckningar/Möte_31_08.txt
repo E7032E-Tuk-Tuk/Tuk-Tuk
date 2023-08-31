@@ -1,0 +1,73 @@
+Bil Projekt
+Möte 31/08-23
+
+Vad ska vi göra?
+- Regenerative breaking 
+- Göra en model över motorer
+- Göra en model över bilen, där motorerna ingår
+- Göra en simulering över bilen
+-- Fokus på den differentialen.
+- Battery management system
+- Dokumentationen ska vara pedagogisk.
+Osäker på 
+- Ska vi göra en fysisk model (taggad)
+-- Hur stor ska vår fysiska model
+- Ska vi racea med bilar.
+
+Personer att kontakta
+- Auto Rickshaw LTU, Studenter som har gjort Tuk-Tuk.
+- Johan Borg (fråga idag)
+-- Är han en faktisk kontaktperson?
+- Jan Van Deventer (Fråga på måndag)
+-- Fråga hur stort ramverket av arbetet.
+-- Vilka är våra kontaktpersoner
+
+Vad behöver vi för saker?
+- Mäta rotationshastigheten
+- Mäta hastighet
+
+Vad har vi tillgång till?
+- Simuleringsverktyg
+-- Simscape är bra för kontroll.
+-- Modelica är bra för att modellera. 
+- PCB Verktyg
+-- KiCAD 
+
+Modulärt är läskigt.
+
+Skapa en fil i git som har alla källor
+- Filen heter Sources.md
+
+Private repository eller flera repositories i en git (?)
+
+Ta bilder på Tuk-Tuken
+
+Vad är folk intresserade i?
+- Alexander
+-- Modelring
+-- Motorer
+-- El
+-- 3D printing
+- Emma
+-- Modelring
+-- Kontrollering 
+- Jack
+-- Vad som helst
+- Jim
+-- Hårdvara
+- Magnus
+-- Fuck hårdvara
+- Samuel
+-- Hårdvara 
+
+Alla borde läsa på om differentialer och torque vectoring.
+
+Vem ansvarar för vad?
+- Bestämms efter förstudier
+
+Saker att undersöka
+- Chain drive transmission
+- Torque Vectoring
+- Elektrisk differential 
+
+Arg på Jan
