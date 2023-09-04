@@ -7,4 +7,4 @@ Tuk-Tuk video https://www.youtube.com/@autorickshawltu/videos
 
 Modellera elektrisk bil i openmodelica: http://omwebbook.openmodelica.org/SMEHV
 
-
+Motor-konstanter wiki https://en.wikipedia.org/wiki/Motor_constants
