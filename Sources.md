@@ -18,3 +18,5 @@ TV = Torque Vectoring
 Video om TV i Simulink (formula student projekt): https://se.mathworks.com/videos/matlab-and-simulink-racing-lounge-torque-vectoring-controller-design-tuning-and-testing-100567.html
 
 Paper om TV (liknande projekt, utförlig beskrivning!): https://www.sciencedirect.com/science/article/pii/S2405896319326990
+
+Ett till TV paper: https://www.researchgate.net/publication/259174458_Vehicle_Modeling_and_Performance_Evaluation_Using_Active_Torque_Distribution
