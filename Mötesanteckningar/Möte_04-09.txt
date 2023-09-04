@@ -1,0 +1,53 @@
+Möte 04/09-23
+
+Svar från Jan
+- Vi behöver inte en Växellåda
+- Vi behöver inte Tuk-Tuk:en
+
+Förslag
+- Behöver vi bry oss om "enhjuliga axlar"
+
+Fyrhjulig model
+
+Förutsättningar till simuleringen
+- Ingen sliring
+
+Prata med Johan om motorer och dess datablad
+
+Elektronik
+
+Idéer
+Anta att man kör 
+
+Hur stor ska våran bil vara
+- RC bil
+- Lådbil
+- Gokart
+
+Fredag eftermiddag varje dag
+- Fika varje fredag
+- Samuel tar nästa
+
+Uppdelning i grupper
+- Grupp 1: Hårdvara
+-- Batteri hanteringen
+-- Regenerative braking
+-- Driva motorer
+-- Bromsar
+-- Jim och Samuel
+- Grupp 2: Simulering och kontroll
+-- Undersöka torque vectoring
+-- Undersöka 
+-- Emma och Magnus
+- Grupp 3: Allt mellan hårdvara och Simulering
+-- Hur bilen ska fysiskt vara uppgbyd
+-- Bildynamik
+-- Bromsar
+-- Motor
+-- Alexander och Jack
+
+Tills fredag undersöka dessa grejor!
+
+
+
+
