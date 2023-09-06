@@ -21,7 +21,8 @@ correctly. It has to be done within the project.
 
 #######################################################################################
 
-project report: https://www.overleaf.com/read/jgkpnrftstwv
+project report:
+https://www.overleaf.com/read/jgkpnrftstwv
 
-specs
+specs:
 https://hobbyking.com/en_us/turnigy-sk8-6374-192kv-sensored-brushless-motor-14p.html?___store=en_us
