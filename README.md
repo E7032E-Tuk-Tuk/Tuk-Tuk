@@ -1,5 +1,5 @@
 # Tuk-Tuk
-####################################################################################################
+##########################################################################################################################
 Goals of project:
 
 Scalable: The solution should be able to be used on model vehicles as well as real vehicles.
@@ -14,7 +14,7 @@ upon slowdowns and braking are required.
 Battery management: Charging and discharging batteries is a complex operation when done
 correctly. It has to be done within the project.
 
-####################################################################################################
+##########################################################################################################################
 
 project report: https://www.overleaf.com/read/jgkpnrftstwv
 
