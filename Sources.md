@@ -20,3 +20,5 @@ Video om TV i Simulink (formula student projekt): https://se.mathworks.com/video
 Paper om TV (liknande projekt, utförlig beskrivning!): https://www.sciencedirect.com/science/article/pii/S2405896319326990
 
 Ett till TV paper: https://www.researchgate.net/publication/259174458_Vehicle_Modeling_and_Performance_Evaluation_Using_Active_Torque_Distribution
+
+Ytterligare ett TV paper: http://www.dem.ist.utl.pt/poliveira/Ensino/paper_2017c.pdf
