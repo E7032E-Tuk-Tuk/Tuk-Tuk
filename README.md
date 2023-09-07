@@ -28,3 +28,4 @@ https://www.overleaf.com/read/jgkpnrftstwv
 specs:
 
 https://hobbyking.com/en_us/turnigy-sk8-6374-192kv-sensored-brushless-motor-14p.html?___store=en_us
+<img width="736" alt="IMG_5437" src="https://github.com/E7032E-Tuk-Tuk/Tuk-Tuk/assets/125398959/ec583293-2c11-4101-8e7f-35cc34af9cb3">
