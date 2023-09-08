@@ -22,3 +22,5 @@ Paper om TV (liknande projekt, utförlig beskrivning!): https://www.sciencedirec
 Ett till TV paper: https://www.researchgate.net/publication/259174458_Vehicle_Modeling_and_Performance_Evaluation_Using_Active_Torque_Distribution
 
 Ytterligare ett TV paper: http://www.dem.ist.utl.pt/poliveira/Ensino/paper_2017c.pdf
+
+Jämförelse mellan mätmetoder av fordonshastighet: https://www.researchgate.net/publication/330093904_An_Overview_of_GNSS_and_GPS_based_Velocity_Measurement_in_Comparison_to_Other_Techniques
