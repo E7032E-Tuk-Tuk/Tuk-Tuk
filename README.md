@@ -27,7 +27,11 @@ https://www.overleaf.com/read/jgkpnrftstwv
 
 specs:
 
+Motor:
 https://hobbyking.com/en_us/turnigy-sk8-6374-192kv-sensored-brushless-motor-14p.html?___store=en_us
+
+Motor Driver:
+https://flipsky.net/products/torque-esc-vesc-%C2%AE-bldc-electronic-speed-controller
 
 
 <img width="600" alt="IMG_5437" src="https://github.com/E7032E-Tuk-Tuk/Tuk-Tuk/assets/125398959/ec583293-2c11-4101-8e7f-35cc34af9cb3">
