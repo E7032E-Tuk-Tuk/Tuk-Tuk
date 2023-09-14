@@ -46,3 +46,5 @@ https://www.youtube.com/playlist?list=PLW3FM5Kyc2_4PGkumkAHNXzWtgHhaYe1d (kolla 
 https://se.mathworks.com/help/vdynblks/index.html?s_tid=CRUX_lftnav
 
 https://se.mathworks.com/help/vdynblks/ref/vehiclebody3dof.html#refsect-extended-capabilities
+
+https://se.mathworks.com/help/vdynblks/ref/virtualvehiclecomposer-app.html
