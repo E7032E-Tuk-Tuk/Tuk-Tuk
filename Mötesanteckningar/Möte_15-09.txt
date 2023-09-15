@@ -1,0 +1,38 @@
+Möte 15/09-23
+
+Vad har vi gjort denna vecka
+- Skriv vad ni har gjort i workflow dockumentet.
+- Bestämmt motordriver (FSESC 4.12 50A)
+- programvaran som motordrivaren
+- Skrivit lite om batterier
+- simulation över Fyrhjulig bil är klar
+- Sketch över bilen
+-- Vart får vi vår lastpall
+- Vad ska vara vår MCU?
+-- Arduino Mega 2560
+-- Finns en shield med gyro och accelerometer.
+- Hur mäter vi styrvinkeln
+-- Diode encoder
+-- magnet (suger)
+-- Mushjul från dator
+-- Mekaniskt
+-- Rotary encoder
+-- defelctionsbrygga med potensiometer
+- Hur mäter vi hastigheten
+-- Vinkelhastighet från hjulen
+-- Arduinoskölden har en accelerometer
+
+- Var ska vi testa
+-- Testrink
+
+Vad gör vi tills nästa vecka
+- Alexander
+-- Beställa/köpa bildelar och börja bygga bilen
+- Emma
+-- Gör en trehjulig simulation med backhjulsdrift
+- Jack och Jim
+-- Fortsätter med att undersöka motordrivaren och beställa arduino och motordrivare
+- Magnus
+-- Teori och kontroller
+- Samuel
+-- Undersöker BMS, encoders till framhjulet, vroom vroom (hur vi gassar) och hur man får fram motorparametrar.
