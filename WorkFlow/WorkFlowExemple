@@ -1,0 +1,24 @@
+Format för arbetsflödet:
+
+Titel på subprojekt{ex:----Laga Mat----}
+Vad som gjorts {ex: "Förbrett ingredienser"}
+En kort beskrivning {ex: Har köpt sallad, tomater och gurka, sen hackades dom och lagdes ihop i en salladsskål.}
+Namn på personer involverade {ex: -Alexander, Jultomten och Storfot.}
+
+ ----Laga Mat----
+"Förbrett ingredienser"
+Har köpt sallad, tomater och gurka, sen hackades dom och lagdes ihop i en salladsskål.
+-Alexander, Jultomten och Storfot.
+
+"Stekt kött"
+Strimlat kykling och stekte i stekpannan med smör.
+-Nalle Pu.
+
+----Bjuda in gäster----
+"Gjort kort"
+Klippte ut papper som middagsinbjudan skrevs på.
+-Monty Pyton
+
+"Skickade inbjudningarna"
+Gick till postlådan och la ner breven.
+-Josef Stalin

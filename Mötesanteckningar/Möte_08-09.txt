@@ -1,0 +1,48 @@
+Möte 09/08-23
+
+- Torque vectoring
+-- Används för att eliminera under och överstyrning
+-- Torquen är i yaw riktningen behöver mätas estimeras
+-- Ändra torquen i hjulen för att kor
+-- Vad behöver vi för att kunna göra torque vectoring
+-- Hur mäter vi bilens hastighet 
+-- Motordriven ska reglera motor torque
+
+- Fråga om hur man estimerar hastighet
+-- Accelerometer (Mäta hastighet)
+-- gps (Mäta hastighet)
+-- GNSS (Mäta hastighet)
+-- visuel sensor som pekar på makern (Mäta hastighet)
+-- Gryo (För att mäta yaw- förändring, möjligtviss på hjulen)
+-- Encoders (För att mäta vinkelhastighet)
+
+- Mekanisk broms
+
+- Emma jobbar på simulering
+- Magnus letar fram en kontroller
+
+- Alexander har tagit from formler för hur trehjuliga bilar rör på sig.
+
+- Finns en bilmodel i simscape
+
+- Ratt och gaspedal
+-- Köpa färdig ratt och pedal för att stop in den
+
+Vad frågar vi Johan Borg?
+- Vad skaffar vi ved för att göra datorer.
+- Hur fäster vi motorerna.
+
+Om 4-6 veckor ska den fysiska bilen vara redo att programmera saker på
+Fråga Torbjörn om hur man bestämmer motorparametrar.
+
+Projektet ska vara klart i november
+
+Fråga ifall man kan få whiteboard till projektrummet.
+
+Tills nästa vecka
+Magnus- Fortsätter gå djupare i teorin om torque vectoring och kontroller delen.
+Emma- Fortsätter på bildynamik modell
+Alexander- Ska prata med Johan och läsa på om bygget av den fysiska modellen. OCh göra en presentation.
+Jack - Kolla med styrning, både elektroniken och mekansikt.
+Jim - Läsa på om motordrivare och ifall vi behöver göra den själv.
+Samuel - Läsa på om motordrivare och BMS:en.
