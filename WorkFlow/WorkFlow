@@ -1,4 +1,7 @@
 ----Simulering Modelica----
+Finding model of car-wheel with slip implemented. Practice simulating with modelica. 
+Testing different dimensions (1D-3D) but found 2D modeling with library PlanarMechanics is the simpliest without loosing too much (slip not possible to model in 1D).
+-Emma // 2023-09-14
 ----Motor Drives----
 Searching for motor drivers 
 We have been looking for suitable motor drivers and found one to our specifications: https://flipsky.net/products/torque-esc-vesc-%C2%AE-bldc-electronic-speed-controller // 5h 2023-09-11 - 2023-09-12
