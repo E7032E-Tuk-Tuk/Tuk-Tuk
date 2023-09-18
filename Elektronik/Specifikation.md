@@ -10,3 +10,7 @@ https://flipsky.net/products/torque-esc-vesc-%C2%AE-bldc-electronic-speed-contro
 Software for Motor Driver:
 
 https://vesc-project.com/
+
+Main controll Unit:
+
+https://www.okdo.com/p/okdo-rock-4-model-c-4gb-single-board-computer-rockchip-rk3399-t-arm-cortex-a72-cortex-a53/
