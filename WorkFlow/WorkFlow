@@ -3,6 +3,10 @@ Finding model of car-wheel with slip implemented. Practice simulating with model
 Testing different dimensions (1D-3D) but found 2D modeling with library PlanarMechanics is the simpliest without loosing too much (slip not possible to model in 1D).
 -Emma // 2023-09-14
 
+----Main Controll Unit----
+Setting up okdo x radxa rock 4 se 4gb. // 2023-09-18
+-Jim, Jack
+
 ----Motor Drives----
 Searching for motor drivers 
 We have been looking for suitable motor drivers and found one to our specifications: https://flipsky.net/products/torque-esc-vesc-%C2%AE-bldc-electronic-speed-controller // 5h 2023-09-11 - 2023-09-12
@@ -10,6 +14,8 @@ We have been looking for suitable motor drivers and found one to our specificati
 Testing motor driver
 Fixed so we can try out the motor driver with motor using a power supply // 3h 2023-09-14
 -Jim
+Testing motor drivers with motors // 2023-09-15
+-Jim, Jack
 
 ----Torque Vectoring controller----
 Continued reading resources (papers etc) on Torque Vectoring in order to clear up some details and decide on the most viable implementation for the project.
