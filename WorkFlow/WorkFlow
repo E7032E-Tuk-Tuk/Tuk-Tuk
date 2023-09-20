@@ -16,6 +16,8 @@ Fixed so we can try out the motor driver with motor using a power supply // 3h 2
 -Jim
 Testing motor drivers with motors // 2023-09-15
 -Jim, Jack
+Wrote about four quadrant operation for motor in the report // 2023-09-19
+-Samuel
 
 ----Torque Vectoring controller----
 Continued reading resources (papers etc) on Torque Vectoring in order to clear up some details and decide on the most viable implementation for the project.
