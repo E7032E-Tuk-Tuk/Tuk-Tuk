@@ -18,6 +18,8 @@ Testing motor drivers with motors // 2023-09-15
 -Jim, Jack
 Wrote about four quadrant operation for motor in the report // 2023-09-19
 -Samuel
+Changed connectors on the motors to fit the VESC. // 2023-09-20
+-Jim, Samuel
 
 ----Torque Vectoring controller----
 Continued reading resources (papers etc) on Torque Vectoring in order to clear up some details and decide on the most viable implementation for the project.
@@ -29,10 +31,16 @@ Explored MathWorks Vehicle Dynamics Blockset as a possible alternative simulatio
 
 ----Steering Wheel----
 ----Konstruera platform----
+"Found" a big RC platform at EXP-el that we could use temporarily. // 2023-09-20
+- Jim
 
 ----Battery Management System----
 Wrote a bit about batteries in the report.
 - Samuel // Week 37
+Wrote a bit more about batteries and changed formationg in the report // 2023-09-20
+- Samuel
+
+
 .
 .
 .
