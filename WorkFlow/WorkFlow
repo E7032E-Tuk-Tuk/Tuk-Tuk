@@ -27,6 +27,8 @@ Wrote about four quadrant operation for motor in the report // 2023-09-19
 Changed connectors on the motors to fit the VESC. // 2023-09-20
 -Jim, Samuel
 
+Started writting about motor drivers in the report // 2023-09-21
+-Jim
 
 ----Torque Vectoring controller----
 Continued reading resources (papers etc) on Torque Vectoring in order to clear up some details and decide on the most viable implementation for the project.
