@@ -1,7 +1,11 @@
 ----Simulation Modelica----
 Finding model of car-wheel with slip implemented. Practice simulating with modelica. 
-Testing different dimensions (1D-3D) but found 2D modeling with library PlanarMechanics is the simpliest without loosing too much (slip not possible to model in 1D).
+Testing different dimensions (1D-3D) but found 2D modeling with library PlanarMechanics is the simpliest 
+without loosing too much (slip not possible to model in 1D).
 -Emma // 2023-09-14
+Working on a 3-wheel and a 4-wheel vehicle using PlanarMechanics. The base model is there, but I'm currently 
+working on the steering and how to implement Ackermann's steering.
+-Emma // 2023-09-22
 
 
 ----Main Controll Unit----
