@@ -44,6 +44,11 @@ Studied fundamental vehicle dynamics to expand our theoretical framework, which 
 Explored MathWorks Vehicle Dynamics Blockset as a possible alternative simulation environment (will probably not be used - Modelica simulation environment is progressing well).
 - Magnus // Week 37
 
+Continued studying vehicle dynamics
+- Magnus // Week 38
+
+Sketched some control architectures for the yaw rate controller (Basic P/PI/PD/PID vs State space controller, thinking about how to handle the nonlinearity w.r.t. vehicle speed, e.g. use gain scheduling approach or make the whole controller nonlinear?)
+- Magnus // Week 38
 
 ----Platform----
 Made a sketch for the diffrent forces on the car and looked into the EOM (Equations of Motion) 2023-08-23
@@ -60,6 +65,9 @@ Mailed and searched for infomation about how to get a pre-built platform, such a
 
 Researched about the gokart "Segway Ninebot GoKart Pro". It has one motor per back wheel! // 2023-09-21
 - Samuel
+
+Discussed and looked for alternatives for our test vehicle
+- Everybody // Week 38
 
 ----Battery Management System----
 Wrote a bit about batteries in the report.
