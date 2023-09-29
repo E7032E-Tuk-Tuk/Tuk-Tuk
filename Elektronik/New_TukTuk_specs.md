@@ -1,6 +1,10 @@
 Motor:
 
-Motors, 2 pcs HPM3000B 72V BLDC: https://www.kellycontrollers.eu/hpm3000b-3kw-72v-leghuteses
+Motors, 2 pcs HPM3000B 72V BLDC: 
+
+https://www.kellycontrollers.eu/hpm3000b-3kw-72v-leghuteses
+
+https://www.mze-drive.de/product-page/hpm3000b-3kw-bldc-motor
 
 Motor driver:
 
