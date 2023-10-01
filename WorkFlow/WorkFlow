@@ -50,6 +50,9 @@ Continued studying vehicle dynamics
 Sketched some control architectures for the yaw rate controller (Basic P/PI/PD/PID vs State space controller, thinking about how to handle the nonlinearity w.r.t. vehicle speed, e.g. use gain scheduling approach or make the whole controller nonlinear?)
 - Magnus // Week 38
 
+Implemented a simple PI yaw rate controller in Simulink
+- Magnus // Week 39
+
 ----Platform----
 Made a sketch for the diffrent forces on the car and looked into the EOM (Equations of Motion) 2023-08-23
 -Alex
@@ -68,6 +71,9 @@ Researched about the gokart "Segway Ninebot GoKart Pro". It has one motor per ba
 
 Discussed and looked for alternatives for our test vehicle
 - Everybody // Week 38
+
+In discussion with Jan, we finally decided to use the LTU Tuk-Tuk. We all had a look at the Tuk-Tuk.
+- Everybody // Week 39
 
 ----Battery Management System----
 Wrote a bit about batteries in the report.
