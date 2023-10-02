@@ -6,6 +6,9 @@ without loosing too much (slip not possible to model in 1D).
 Working on a 3-wheel and a 4-wheel vehicle using PlanarMechanics. The base model is there, but I'm currently 
 working on the steering and how to implement Ackermann's steering.
 -Emma // 2023-09-22
+The 3-wheel and 4-wheel vehicles are now fully steerable. Had to make a PI-controller of the torque
+acting on a rotor that turns the wheel to the angle you want.
+-Emma // 2023-10-02
 
 
 ----Main Controll Unit----
