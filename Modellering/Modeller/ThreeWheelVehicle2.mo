@@ -30,11 +30,21 @@ model ThreeWheelVehicle2
   Real Pleft(start = 0) "W Power of left rear wheel";
   Real Pright(start = 0) "W Power of right rear wheel";
   // Values in another coordinate frame
-  Real vx(start=speedStart) "m/s car front direction";
-  Real vy(start=0) "m/s car right";
-  // Force vectors on each wheel
-  // yaw
-  // wheel effective radius
+  Real[2] v_car(start={speedStart,0}) "Velocity in car frame";
+  Real[2] a_car(start={speedStart,0}) "Acceleration in car frame";
+  Real[2,2] Trot(start={{0, 1}, {1, 0}}) "Rotation matrix";
+  Real phi_car(start=0) "Angular velocity in car frame";
+  Real w_car(start=0) "Angular velocity in car frame";
+  Real z_car(start=0) "Angulaar acceleration in car frame";
+  Real effRadiusFrontWheel(start=wheelRadius);
+  Real effRadiusRearLeftWheel(start=wheelRadius);
+  Real effRadiusRearRightWheel(start=wheelRadius);
+  Real[1,3] forceFrontWheel;
+  Real[1,3] forceRearLeftWheel;
+  Real[1,3] forceRearRightWheel;
+  Real slipAngleFrontWheel(start=0);
+  Real slipAngleRearLeftWheel(start=0);
+  Real slipAngleRearRightWheel(start=0);
   // World
   inner PlanarMechanics.PlanarWorldIn3D planarWorld(constantGravity = {0, 0}) annotation(
     Placement(visible = true, transformation(origin = {-158, 114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -79,12 +89,12 @@ model ThreeWheelVehicle2
     J = inertiaWheel, 
     phi(fixed = true, start = 0), 
     w(fixed = true, start = omegaStart)) annotation(
-    Placement(visible = true, transformation(origin = {-138, -48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-96, -48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Components.Inertia rearRightInertia(
     J = inertiaWheel, 
     phi(fixed = true, start = 0), 
     w(fixed = true, start = omegaStart)) annotation(
-    Placement(visible = true, transformation(origin = {144, -58}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {90, -56}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Components.Inertia frontInertia(
     J = inertiaWheel, 
     phi(fixed = true, start = 0), 
@@ -93,25 +103,25 @@ model ThreeWheelVehicle2
   Modelica.Blocks.Sources.Constant const(k = 0) annotation(
     Placement(visible = true, transformation(origin = {-120, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Sources.Torque torqueRearLeft annotation(
-    Placement(visible = true, transformation(origin = {-128, -24}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-162, -22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Sources.Torque torqueRearRight annotation(
-    Placement(visible = true, transformation(origin = {124, -14}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {160, -10}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Components.IdealGear gearLeft(ratio = gearRatio)  annotation(
-    Placement(visible = true, transformation(origin = {-98, -48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-132, -46}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Components.IdealGear gearRight(ratio = gearRatio)  annotation(
-    Placement(visible = true, transformation(origin = {102, -58}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {124, -58}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
 
-  // Vehicle body
+// Vehicle body
   // Test translation to body, can it have 0 length that can translate in x-direction?
   PlanarMechanics.Parts.FixedTranslation rearLeft(r = {vehicleWidth/2, 0}) annotation(
     Placement(visible = true, transformation(origin = {-20, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   PlanarMechanics.Parts.FixedTranslation rearRight(r = {vehicleWidth/2, 0}) annotation(
     Placement(visible = true, transformation(origin = {18, -54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   PlanarMechanics.Parts.FixedTranslation rear(
-    r = {0, backLength}) annotation(
+    color = {0, 255, 0}, r = {0, backLength}, width = .2) annotation(
     Placement(visible = true, transformation(origin = {-8, -16}, extent = {{-10, 10}, {10, -10}}, rotation = 90)));
   PlanarMechanics.Parts.FixedTranslation front(
-    r = {0, frontLength - wheelRadius/5}) annotation(
+    color = {0, 255, 0}, r = {0, frontLength - wheelRadius/5}, width = .2) annotation(
     Placement(visible = true, transformation(origin = {-8, 24}, extent = {{-10, 10}, {10, -10}}, rotation = 90)));
   PlanarMechanics.Parts.Body body(
     I = inertiaBody, 
@@ -138,11 +148,11 @@ model ThreeWheelVehicle2
   PlanarMechanics.Parts.FixedTranslation front2(r = {0.001, 0}) annotation(
     Placement(visible = true, transformation(origin = {12, 38}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
 
-  // Signal sources
+// Signal sources
   Modelica.Blocks.Sources.Constant const1(k = 10) annotation(
-    Placement(visible = true, transformation(origin = {-164, -24}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-198, -22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const2(k = 10) annotation(
-    Placement(visible = true, transformation(origin = {156, -18}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {192, -14}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Sine sine(amplitude = 25/180*3.14159, f = 0.05)  annotation(
     Placement(visible = true, transformation(origin = {-136, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
@@ -152,9 +162,25 @@ equation
   R = min(speed/(body.w + 0.00000001), 1000);
   Pleft = rearLeftWheel.w_roll*torqueRearLeft.tau;
   Pright = rearRightWheel.w_roll*torqueRearRight.tau;
-  
-  // Velocity car frame x - front, y - right
-  
+  // Car frame equations
+  Trot = [-sin(body.phi), cos(body.phi); cos(body.phi), sin(body.phi)];
+  v_car = Trot*body.v;
+  a_car = Trot*body.a;
+  phi_car = -body.phi;
+  w_car = -body.w;
+  z_car = -body.z;
+  // Effective radius ?
+  effRadiusFrontWheel = frontWheel.v_long / frontWheel.w_roll;
+  effRadiusRearLeftWheel = rearLeftWheel.v_long / rearLeftWheel.w_roll;
+  effRadiusRearRightWheel = rearRightWheel.v_long / rearRightWheel.w_roll;
+  // Forces on the wheels in car coordinate frame
+  forceFrontWheel  = [frontWheel.f_long, frontWheel.f_lat, frontWheel.fN];
+  forceRearLeftWheel = [rearLeftWheel.f_long, rearLeftWheel.f_lat, rearLeftWheel.fN];
+  forceRearRightWheel = [rearRightWheel.f_long, rearRightWheel.f_lat, rearRightWheel.fN];
+  // Slip angle for each wheel
+  slipAngleFrontWheel = atan( frontWheel.v_lat/frontWheel.v_long );
+  slipAngleRearLeftWheel = atan( rearLeftWheel.v_lat/rearLeftWheel.v_long );
+  slipAngleRearRightWheel = atan( rearRightWheel.v_lat/rearRightWheel.v_long );
   
   connect(rearLeftWheel.frame_a, rearLeft.frame_a) annotation(
     Line(points = {{-48, -48}, {-30, -48}, {-30, -50}}));
@@ -175,9 +201,9 @@ equation
   connect(rear.frame_a, rearLeft.frame_b) annotation(
     Line(points = {{-8, -26}, {-10, -26}, {-10, -50}}));
   connect(const1.y, torqueRearLeft.tau) annotation(
-    Line(points = {{-153, -24}, {-140, -24}}, color = {0, 0, 127}));
+    Line(points = {{-187, -22}, {-174, -22}}, color = {0, 0, 127}));
   connect(const2.y, torqueRearRight.tau) annotation(
-    Line(points = {{145, -18}, {135, -18}, {135, -14}}, color = {0, 0, 127}));
+    Line(points = {{181, -14}, {171, -14}, {171, -10}}, color = {0, 0, 127}));
   connect(frontWheel.frame_a, frontTrail.frame_b) annotation(
     Line(points = {{6, 120}, {10, 120}, {10, 100}}));
   connect(body2.frame_a, frontTrail.frame_b) annotation(
@@ -200,18 +226,18 @@ equation
     Line(points = {{-8, 34}, {-8, 40}, {2, 40}, {2, 38}}, color = {95, 95, 95}));
   connect(sine.y, steeringControl.u[1]) annotation(
     Line(points = {{-124, 54}, {-98, 54}, {-98, 60}}, color = {0, 0, 127}));
-  connect(rearRightWheel.flange_a, gearRight.flange_b) annotation(
-    Line(points = {{68, -56}, {92, -56}, {92, -58}}));
-  connect(gearRight.flange_a, rearRightInertia.flange_b) annotation(
-    Line(points = {{112, -58}, {134, -58}}));
   connect(torqueRearRight.flange, gearRight.flange_a) annotation(
-    Line(points = {{114, -14}, {112, -14}, {112, -58}}));
-  connect(gearLeft.flange_b, rearLeftWheel.flange_a) annotation(
-    Line(points = {{-88, -48}, {-62, -48}}));
-  connect(rearLeftInertia.flange_b, gearLeft.flange_a) annotation(
-    Line(points = {{-128, -48}, {-108, -48}}));
+    Line(points = {{150, -10}, {134, -10}, {134, -58}}));
   connect(torqueRearLeft.flange, gearLeft.flange_a) annotation(
-    Line(points = {{-118, -24}, {-108, -24}, {-108, -48}}));
+    Line(points = {{-152, -22}, {-142, -22}, {-142, -46}}));
+  connect(gearLeft.flange_b, rearLeftInertia.flange_a) annotation(
+    Line(points = {{-122, -46}, {-106, -46}, {-106, -48}}));
+  connect(rearLeftInertia.flange_b, rearLeftWheel.flange_a) annotation(
+    Line(points = {{-86, -48}, {-62, -48}}));
+  connect(rearRightWheel.flange_a, rearRightInertia.flange_b) annotation(
+    Line(points = {{68, -56}, {80, -56}}));
+  connect(rearRightInertia.flange_a, gearRight.flange_b) annotation(
+    Line(points = {{100, -56}, {107, -56}, {107, -58}, {114, -58}}));
   annotation(
     Placement(visible = true, transformation(origin = {16, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)),
     uses(Modelica(version = "4.0.0"), PlanarMechanics(version = "1.6.0")),
