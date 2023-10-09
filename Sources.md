@@ -25,6 +25,8 @@ Ytterligare ett TV paper: http://www.dem.ist.utl.pt/poliveira/Ensino/paper_2017c
 
 Jämförelse mellan mätmetoder av fordonshastighet: https://www.researchgate.net/publication/330093904_An_Overview_of_GNSS_and_GPS_based_Velocity_Measurement_in_Comparison_to_Other_Techniques
 
+Om racing tires, slip och hjuldynamik: https://racingcardynamics.com/racing-tires-lateral-force/
+
 ## En massa länkar om vehicle dynamics följer
 
 https://en.wikipedia.org/wiki/Slip_angle
