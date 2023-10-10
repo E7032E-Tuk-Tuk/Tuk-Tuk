@@ -1,4 +1,4 @@
-model ThreeWheelVehicle2
+model ThreeWheelVehicleFMU
   import PlanarMechanics;
   parameter Real g = 9.82 "m/s2 Gravity";
   // Wheel parameters
@@ -154,14 +154,59 @@ model ThreeWheelVehicle2
   PlanarMechanics.VehicleComponents.AirResistanceLongitudinal airResistanceLongitudinal(
     area = vehicleFrontArea, c_W = dragCoef, r = {0, 1})  annotation(
     Placement(visible = true, transformation(origin = {72, 42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
-// Signal sources
-  Modelica.Blocks.Sources.Constant const1(k = 10) annotation(
-    Placement(visible = true, transformation(origin = {-198, -22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const2(k = 10) annotation(
-    Placement(visible = true, transformation(origin = {192, -14}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Sine sine(amplitude = 25/180*3.14159, f = 0.05)  annotation(
-    Placement(visible = true, transformation(origin = {-136, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  // Inputs and outputs
+  Modelica.Blocks.Interfaces.RealInput inputSteering annotation(
+    Placement(visible = true, transformation(origin = {-200, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-190, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealInput inputRearLeftTorque annotation(
+    Placement(visible = true, transformation(origin = {-200, -20}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-190, -20}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealInput inputRearRightTorque annotation(
+    Placement(visible = true, transformation(origin = {200, -20}, extent = {{20, -20}, {-20, 20}}, rotation = 0), iconTransformation(origin = {206, -8}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outSlipAngleFront annotation(
+    Placement(visible = true, transformation(origin = {270, 132}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {270, 132}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outSlipAngleLeft annotation(
+    Placement(visible = true, transformation(origin = {266, 98}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {266, 98}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outSlipAngleRight annotation(
+    Placement(visible = true, transformation(origin = {266, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {266, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outTurnRadOptimal annotation(
+    Placement(visible = true, transformation(origin = {266, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {266, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outTurnRadReal annotation(
+    Placement(visible = true, transformation(origin = {268, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {268, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealVectorOutput outForceLeftWheel[1,3] annotation(
+    Placement(visible = true, transformation(origin = {258, -86}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {258, -86}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealVectorOutput outForceRightWheel[1,3] annotation(
+    Placement(visible = true, transformation(origin = {262, -134}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {262, -134}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealVectorOutput outForceFrontWheel[1,3] annotation(
+    Placement(visible = true, transformation(origin = {258, -38}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outCarDistance annotation(
+    Placement(visible = true, transformation(origin = {372, 130}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {372, 130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outCarSpeed annotation(
+    Placement(visible = true, transformation(origin = {376, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {376, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealVectorOutput outCarVelocity[2] annotation(
+    Placement(visible = true, transformation(origin = {364, 86}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {364, 86}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealVectorOutput outCarAcc[2] annotation(
+    Placement(visible = true, transformation(origin = {368, -2}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {368, -2}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealVectorOutput outCarPosition[2] annotation(
+    Placement(visible = true, transformation(origin = {364, 180}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {364, 180}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outCarAngle annotation(
+    Placement(visible = true, transformation(origin = {370, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {370, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outCarAngularVelocity annotation(
+    Placement(visible = true, transformation(origin = {374, -92}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {374, -92}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outCarAngularAcc annotation(
+    Placement(visible = true, transformation(origin = {378, -136}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {378, -136}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outEffRadiusFrontWheel annotation(
+    Placement(visible = true, transformation(origin = {480, 174}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {480, 174}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outEffRadiusLeftWheel annotation(
+    Placement(visible = true, transformation(origin = {482, 126}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {482, 126}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outEffRadiusRightWheel annotation(
+    Placement(visible = true, transformation(origin = {480, 74}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {480, 74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outActualSteeringAngle annotation(
+    Placement(visible = true, transformation(origin = {478, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {478, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outSlipFrontWheel annotation(
+    Placement(visible = true, transformation(origin = {478, -14}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {478, -14}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outSlipLeftWheel annotation(
+    Placement(visible = true, transformation(origin = {480, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {480, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outSlipRightWheel annotation(
+    Placement(visible = true, transformation(origin = {482, -102}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {482, -102}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
 equation
   speed = sqrt(body.v[1]^2 + body.v[2]^2);
@@ -190,6 +235,30 @@ equation
 // Turning radius
   turnRadiusOptimal = min(sqrt(backLength^2 + (backLength + frontLength)^2/(tan(angleSensor.phi)^2 + 0.000000001)), turnRadiusMAX);
   turnRadiusReal = min(sqrt(speed^2/(body.w^2 + 0.000000001)), turnRadiusMAX);
+  // Outputs
+  outSlipAngleFront = slipAngleFrontWheel;
+  outSlipAngleLeft = slipAngleRearLeftWheel;
+  outSlipAngleRight = slipAngleRearRightWheel;
+  outTurnRadOptimal = turnRadiusOptimal;
+  outTurnRadReal = turnRadiusReal;
+  outForceFrontWheel = forceFrontWheel;
+  outForceLeftWheel = forceRearLeftWheel;
+  outForceRightWheel = forceRearRightWheel;
+  outCarPosition = body.r;
+  outCarDistance = S;
+  outCarVelocity = v_car;
+  outCarAcc = a_car;
+  outCarSpeed = speed;
+  outCarAngle = phi_car;
+  outCarAngularVelocity = w_car;
+  outCarAngularAcc = z_car;
+  outEffRadiusFrontWheel = effRadiusFrontWheel;
+  outEffRadiusLeftWheel = effRadiusRearLeftWheel;
+  outEffRadiusRightWheel = effRadiusRearRightWheel;
+  outSlipFrontWheel = frontWheel.v_slip;
+  outSlipLeftWheel = rearLeftWheel.v_slip;
+  outSlipRightWheel = rearRightWheel.v_slip;
+  // Connections
   connect(rearLeftWheel.frame_a, rearLeft.frame_a) annotation(
     Line(points = {{-48, -48}, {-30, -48}, {-30, -50}}));
   connect(const.y, rearLeftWheel.dynamicLoad) annotation(
@@ -208,10 +277,6 @@ equation
     Line(points = {{-8, -6}, {-8, 14}}, color = {95, 95, 95}));
   connect(rear.frame_a, rearLeft.frame_b) annotation(
     Line(points = {{-8, -26}, {-10, -26}, {-10, -50}}));
-  connect(const1.y, torqueRearLeft.tau) annotation(
-    Line(points = {{-187, -22}, {-174, -22}}, color = {0, 0, 127}));
-  connect(const2.y, torqueRearRight.tau) annotation(
-    Line(points = {{181, -14}, {171, -14}, {171, -10}}, color = {0, 0, 127}));
   connect(frontWheel.frame_a, frontTrail.frame_b) annotation(
     Line(points = {{6, 120}, {10, 120}, {10, 100}}));
   connect(body2.frame_a, frontTrail.frame_b) annotation(
@@ -232,8 +297,6 @@ equation
     Line(points = {{8, 50}, {8, 42}, {22, 42}, {22, 38}}, color = {95, 95, 95}));
   connect(front.frame_b, front2.frame_b) annotation(
     Line(points = {{-8, 34}, {-8, 40}, {2, 40}, {2, 38}}, color = {95, 95, 95}));
-  connect(sine.y, steeringControl.u[1]) annotation(
-    Line(points = {{-124, 54}, {-98, 54}, {-98, 60}}, color = {0, 0, 127}));
   connect(torqueRearRight.flange, gearRight.flange_a) annotation(
     Line(points = {{150, -10}, {134, -10}, {134, -58}}));
   connect(torqueRearLeft.flange, gearLeft.flange_a) annotation(
@@ -248,9 +311,19 @@ equation
     Line(points = {{100, -56}, {107, -56}, {107, -58}, {114, -58}}));
   connect(airResistanceLongitudinal.frame_a, body.frame_a) annotation(
     Line(points = {{62, 42}, {54, 42}, {54, 16}}, color = {95, 95, 95}));
+  connect(inputSteering, steeringControl.u[1]) annotation(
+    Line(points = {{-200, 60}, {-98, 60}}, color = {0, 0, 127}));
+  connect(inputRearLeftTorque, torqueRearLeft.tau) annotation(
+    Line(points = {{-200, -20}, {-174, -20}, {-174, -22}}, color = {0, 0, 127}));
+  connect(inputRearRightTorque, torqueRearRight.tau) annotation(
+    Line(points = {{200, -20}, {172, -20}, {172, -10}}, color = {0, 0, 127}));
+  // Connect output
+  connect(outActualSteeringAngle, angleSensor.phi);
+  
+  
   annotation(
     Placement(visible = true, transformation(origin = {16, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)),
     uses(Modelica(version = "4.0.0"), PlanarMechanics(version = "1.6.0")),
-    Diagram(coordinateSystem(extent = {{-180, 140}, {180, -100}})),
+    Diagram(coordinateSystem(extent = {{-220, 200}, {500, -160}})),
     version = "");
-end ThreeWheelVehicle2;
+end ThreeWheelVehicleFMU;
