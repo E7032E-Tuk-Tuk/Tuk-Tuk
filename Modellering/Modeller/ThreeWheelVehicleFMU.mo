@@ -5,6 +5,7 @@ model ThreeWheelVehicleFMU
   parameter Real wheelRadius = 0.28 "m";
   parameter Real inertiaWheel = 0.3;
   parameter Real gearRatio = 1/8;
+  parameter Real cr = 0.05 "Rolling resistance";
   // Vehicle parameters, be careful with mass center placement!
   parameter Real mass = 350 "kg";
   parameter Real inertiaBody = 350 "kgm2";
@@ -54,7 +55,7 @@ model ThreeWheelVehicleFMU
     Placement(visible = true, transformation(origin = {-158, 114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   // Wheels
   WheelWithSlip rearRightWheel(
-    N = g*mass*(1 - massCenterY/100)*0.5, 
+    N = g*mass*(1 - massCenterY/100)*0.5, cr = cr, 
     mu_A = muA, 
     mu_S = muS, 
     r = {0, 1}, 
@@ -66,7 +67,7 @@ model ThreeWheelVehicleFMU
     w_roll(start = omegaStart)) annotation(
     Placement(visible = true, transformation(origin = {58, -56}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   WheelWithSlip rearLeftWheel(
-    N = g*mass*(1 - massCenterY/100)*0.5, 
+    N = g*mass*(1 - massCenterY/100)*0.5, cr = cr, 
     mu_A = muA, 
     mu_S = muS, 
     r = {0, 1}, 
@@ -78,7 +79,7 @@ model ThreeWheelVehicleFMU
     w_roll(start = omegaStart)) annotation(
     Placement(visible = true, transformation(origin = {-52, -48}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   WheelWithSlip frontWheel(
-    N = g*mass*massCenterY/100, 
+    N = g*mass*massCenterY/100, cr = cr, 
     mu_A = muA, 
     mu_S = muS, 
     r = {0, 1}, 
@@ -143,12 +144,8 @@ model ThreeWheelVehicleFMU
     Placement(visible = true, transformation(origin = {40, 130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   PlanarMechanics.Joints.Revolute revolute(useFlange = true) annotation(
     Placement(visible = true, transformation(origin = {8, 60}, extent = {{-10, 10}, {10, -10}}, rotation = 90)));
-  Modelica.Mechanics.Rotational.Sources.Torque torque annotation(
-    Placement(visible = true, transformation(origin = {-30, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Sensors.AngleSensor angleSensor annotation(
     Placement(visible = true, transformation(origin = {-44, 90}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-  SteeringControl steeringControl(i = 900, p = 800) annotation(
-    Placement(visible = true, transformation(origin = {-86, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   PlanarMechanics.Parts.FixedTranslation front2(r = {0.001, 0}) annotation(
     Placement(visible = true, transformation(origin = {12, 38}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   PlanarMechanics.VehicleComponents.AirResistanceLongitudinal airResistanceLongitudinal(
@@ -207,7 +204,10 @@ model ThreeWheelVehicleFMU
     Placement(visible = true, transformation(origin = {480, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {480, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealOutput outSlipRightWheel annotation(
     Placement(visible = true, transformation(origin = {482, -102}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {482, -102}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  
+  Modelica.Blocks.Math.Gain neg(k = -1)  annotation(
+    Placement(visible = true, transformation(origin = {-138, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Mechanics.Rotational.Sources.Position position(exact = true) annotation(
+    Placement(visible = true, transformation(origin = {-74, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   speed = sqrt(body.v[1]^2 + body.v[2]^2);
   S = abs(body.r[1]) + abs(body.r[2]);
@@ -235,7 +235,7 @@ equation
 // Turning radius
   turnRadiusOptimal = min(sqrt(backLength^2 + (backLength + frontLength)^2/(tan(angleSensor.phi)^2 + 0.000000001)), turnRadiusMAX);
   turnRadiusReal = min(sqrt(speed^2/(body.w^2 + 0.000000001)), turnRadiusMAX);
-  // Outputs
+// Outputs
   outSlipAngleFront = slipAngleFrontWheel;
   outSlipAngleLeft = slipAngleRearLeftWheel;
   outSlipAngleRight = slipAngleRearRightWheel;
@@ -258,7 +258,7 @@ equation
   outSlipFrontWheel = frontWheel.v_slip;
   outSlipLeftWheel = rearLeftWheel.v_slip;
   outSlipRightWheel = rearRightWheel.v_slip;
-  // Connections
+// Connections
   connect(rearLeftWheel.frame_a, rearLeft.frame_a) annotation(
     Line(points = {{-48, -48}, {-30, -48}, {-30, -50}}));
   connect(const.y, rearLeftWheel.dynamicLoad) annotation(
@@ -285,12 +285,6 @@ equation
     Line(points = {{10, 80}, {8, 80}, {8, 70}}, color = {95, 95, 95}));
   connect(revolute.flange_a, angleSensor.flange) annotation(
     Line(points = {{-2, 60}, {-2, 90}, {-34, 90}}));
-  connect(torque.flange, revolute.flange_a) annotation(
-    Line(points = {{-20, 60}, {-2, 60}}));
-  connect(angleSensor.phi, steeringControl.u[2]) annotation(
-    Line(points = {{-55, 90}, {-102.5, 90}, {-102.5, 60}, {-98, 60}}, color = {0, 0, 127}));
-  connect(steeringControl.y, torque.tau) annotation(
-    Line(points = {{-75, 60}, {-42, 60}}, color = {0, 0, 127}));
   connect(body.frame_a, front.frame_a) annotation(
     Line(points = {{54, 16}, {-8, 16}}));
   connect(revolute.frame_a, front2.frame_a) annotation(
@@ -311,16 +305,18 @@ equation
     Line(points = {{100, -56}, {107, -56}, {107, -58}, {114, -58}}));
   connect(airResistanceLongitudinal.frame_a, body.frame_a) annotation(
     Line(points = {{62, 42}, {54, 42}, {54, 16}}, color = {95, 95, 95}));
-  connect(inputSteering, steeringControl.u[1]) annotation(
-    Line(points = {{-200, 60}, {-98, 60}}, color = {0, 0, 127}));
   connect(inputRearLeftTorque, torqueRearLeft.tau) annotation(
     Line(points = {{-200, -20}, {-174, -20}, {-174, -22}}, color = {0, 0, 127}));
   connect(inputRearRightTorque, torqueRearRight.tau) annotation(
     Line(points = {{200, -20}, {172, -20}, {172, -10}}, color = {0, 0, 127}));
-  // Connect output
+// Connect output
   connect(outActualSteeringAngle, angleSensor.phi);
-  
-  
+  connect(inputSteering, neg.u) annotation(
+    Line(points = {{-200, 60}, {-150, 60}}, color = {0, 0, 127}));
+  connect(neg.y, position.phi_ref) annotation(
+    Line(points = {{-126, 60}, {-86, 60}}, color = {0, 0, 127}));
+  connect(position.flange, revolute.flange_a) annotation(
+    Line(points = {{-64, 60}, {-2, 60}}));
   annotation(
     Placement(visible = true, transformation(origin = {16, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)),
     uses(Modelica(version = "4.0.0"), PlanarMechanics(version = "1.6.0")),
