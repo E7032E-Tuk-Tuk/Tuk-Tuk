@@ -5,7 +5,7 @@ model ThreeWheelVehicleFMU
   parameter Real wheelRadius = 0.28 "m";
   parameter Real inertiaWheel = 0.3;
   parameter Real gearRatio = 1/8;
-  parameter Real cr = 0.05 "Rolling resistance";
+  parameter Real c_roll = 0.05 "Rolling resistance";
   // Vehicle parameters, be careful with mass center placement!
   parameter Real mass = 350 "kg";
   parameter Real inertiaBody = 350 "kgm2";
@@ -55,7 +55,7 @@ model ThreeWheelVehicleFMU
     Placement(visible = true, transformation(origin = {-158, 114}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   // Wheels
   WheelWithSlip rearRightWheel(
-    N = g*mass*(1 - massCenterY/100)*0.5, cr = cr, 
+    N = g*mass*(1 - massCenterY/100)*0.5, cr = c_roll, 
     mu_A = muA, 
     mu_S = muS, 
     r = {0, 1}, 
@@ -67,7 +67,7 @@ model ThreeWheelVehicleFMU
     w_roll(start = omegaStart)) annotation(
     Placement(visible = true, transformation(origin = {58, -56}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   WheelWithSlip rearLeftWheel(
-    N = g*mass*(1 - massCenterY/100)*0.5, cr = cr, 
+    N = g*mass*(1 - massCenterY/100)*0.5, cr = c_roll, 
     mu_A = muA, 
     mu_S = muS, 
     r = {0, 1}, 
@@ -79,7 +79,7 @@ model ThreeWheelVehicleFMU
     w_roll(start = omegaStart)) annotation(
     Placement(visible = true, transformation(origin = {-52, -48}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   WheelWithSlip frontWheel(
-    N = g*mass*massCenterY/100, cr = cr, 
+    N = g*mass*massCenterY/100, cr = c_roll, 
     mu_A = muA, 
     mu_S = muS, 
     r = {0, 1}, 
