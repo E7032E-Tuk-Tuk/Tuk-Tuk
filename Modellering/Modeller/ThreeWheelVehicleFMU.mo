@@ -14,6 +14,7 @@ model ThreeWheelVehicleFMU
   parameter Real backLength = 0.5 "m";
   parameter Real vehicleWidth = 1 "m";
   parameter Real massCenterY = backLength/(backLength + frontLength) * 100 "%";
+  parameter Real massCenterZ = 0.3 "m height to COM";
   parameter Real vehicleFrontArea = 1.5 "m2, for air resistance calculation";
   parameter Real dragCoef = 0.5 "Air drag coefficient";
   // Slip parameters
@@ -89,7 +90,7 @@ model ThreeWheelVehicleFMU
     vAdhesion_min = vAd, 
     vSlide_min = vSl, 
     w_roll(start = omegaStart)) annotation(
-    Placement(visible = true, transformation(origin = {2, 120}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {8, 120}, extent = {{8, -6}, {-8, 6}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Components.Inertia rearLeftInertia(
     J = inertiaWheel, 
     phi(fixed = true, start = 0), 
@@ -105,8 +106,6 @@ model ThreeWheelVehicleFMU
     phi(fixed = true, start = 0), 
     w(fixed = true, start = omegaStart)) annotation(
     Placement(visible = true, transformation(origin = {-34, 120}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const(k = 0) annotation(
-    Placement(visible = true, transformation(origin = {-124, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Sources.Torque torqueRearLeft annotation(
     Placement(visible = true, transformation(origin = {-162, -22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Sources.Torque torqueRearRight annotation(
@@ -146,11 +145,23 @@ model ThreeWheelVehicleFMU
     Placement(visible = true, transformation(origin = {8, 60}, extent = {{-10, 10}, {10, -10}}, rotation = 90)));
   Modelica.Mechanics.Rotational.Sensors.AngleSensor angleSensor annotation(
     Placement(visible = true, transformation(origin = {-44, 90}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-  PlanarMechanics.Parts.FixedTranslation front2(r = {0.001, 0}) annotation(
+  PlanarMechanics.Parts.FixedTranslation front2(r = {0.0000000001, 0}) annotation(
     Placement(visible = true, transformation(origin = {12, 38}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   PlanarMechanics.VehicleComponents.AirResistanceLongitudinal airResistanceLongitudinal(
     area = vehicleFrontArea, c_W = dragCoef, r = {0, 1})  annotation(
     Placement(visible = true, transformation(origin = {72, 42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  WeightTransfer weightTransfer(
+    m = mass,
+    h = massCenterZ,
+    L = frontLength + backLength,
+    Wr = vehicleWidth,
+    v = v_car,
+    a = a_car,
+    w = w_car
+    ) annotation(
+    Placement(visible = true, transformation(origin = {-88, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Real debugWeghtTransfer;
+  Real debugWheelInTheAir;
   // Inputs and outputs
   Modelica.Blocks.Interfaces.RealInput inputSteering annotation(
     Placement(visible = true, transformation(origin = {-200, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-190, 60}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
@@ -206,8 +217,25 @@ model ThreeWheelVehicleFMU
     Placement(visible = true, transformation(origin = {482, -102}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {482, -102}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Math.Gain neg(k = -1)  annotation(
     Placement(visible = true, transformation(origin = {-138, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Mechanics.Rotational.Sources.Position position(exact = true) annotation(
+  Modelica.Mechanics.Rotational.Sources.Position positionPhi(exact = true) annotation(
     Placement(visible = true, transformation(origin = {-74, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Math.Gain neg2(k = -1) annotation(
+    Placement(visible = true, transformation(origin = {-76, 90}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outFrollFront annotation(
+    Placement(visible = true, transformation(origin = {570, 176}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {570, 176}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outFrollLeft annotation(
+    Placement(visible = true, transformation(origin = {574, 128}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {574, 128}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput outFrollRight annotation(
+    Placement(visible = true, transformation(origin = {574, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {574, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+  Modelica.Blocks.Interfaces.RealOutput outWeightTransfer[3] annotation(
+    Placement(visible = true, transformation(origin = {572, 36}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {572, 36}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  PlanarMechanics.Sources.WorldForce frontRollResistance annotation(
+    Placement(visible = true, transformation(origin = {-2, 152}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  PlanarMechanics.Sources.WorldForce rearLeftRollResistance annotation(
+    Placement(visible = true, transformation(origin = {-50, -24}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  PlanarMechanics.Sources.WorldForce rearRightRollResistance annotation(
+    Placement(visible = true, transformation(origin = {56, -24}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
 equation
   speed = sqrt(body.v[1]^2 + body.v[2]^2);
   S = abs(body.r[1]) + abs(body.r[2]);
@@ -258,27 +286,27 @@ equation
   outSlipFrontWheel = frontWheel.v_slip;
   outSlipLeftWheel = rearLeftWheel.v_slip;
   outSlipRightWheel = rearRightWheel.v_slip;
+  outFrollFront = frontWheel.f_roll;
+  outFrollLeft = rearLeftWheel.f_roll;
+  outFrollRight = rearRightWheel.f_roll;
+// Debug
+  debugWeghtTransfer = (weightTransfer.y[1] + weightTransfer.y[2] + weightTransfer.y[3]);
+  debugWheelInTheAir = frontWheel.fN + rearLeftWheel.fN + rearRightWheel.fN - mass*g;
 // Connections
   connect(rearLeftWheel.frame_a, rearLeft.frame_a) annotation(
     Line(points = {{-48, -48}, {-30, -48}, {-30, -50}}));
-  connect(const.y, rearLeftWheel.dynamicLoad) annotation(
-    Line(points = {{-113, 2}, {-113, -70}, {-52, -70}, {-52, -58}}, color = {0, 0, 127}));
-  connect(const.y, rearRightWheel.dynamicLoad) annotation(
-    Line(points = {{-113, 2}, {41, 2}, {41, -74}, {58, -74}, {58, -66}}, color = {0, 0, 127}));
   connect(frontInertia.flange_b, frontWheel.flange_a) annotation(
-    Line(points = {{-24, 120}, {-8, 120}}));
+    Line(points = {{-24, 120}, {0, 120}}));
   connect(rearRight.frame_b, rearRightWheel.frame_a) annotation(
     Line(points = {{28, -54}, {54, -54}, {54, -56}}));
   connect(rearLeft.frame_b, rearRight.frame_a) annotation(
     Line(points = {{-10, -50}, {8, -50}, {8, -54}}));
-  connect(const.y, frontWheel.dynamicLoad) annotation(
-    Line(points = {{-113, 2}, {2, 2}, {2, 110}}, color = {0, 0, 127}));
   connect(rear.frame_b, front.frame_a) annotation(
     Line(points = {{-8, -6}, {-8, 14}}, color = {95, 95, 95}));
   connect(rear.frame_a, rearLeft.frame_b) annotation(
     Line(points = {{-8, -26}, {-10, -26}, {-10, -50}}));
   connect(frontWheel.frame_a, frontTrail.frame_b) annotation(
-    Line(points = {{6, 120}, {10, 120}, {10, 100}}));
+    Line(points = {{11, 120}, {11, 109.5}, {10, 109.5}, {10, 100}}));
   connect(body2.frame_a, frontTrail.frame_b) annotation(
     Line(points = {{30, 130}, {10, 130}, {10, 100}}, color = {95, 95, 95}));
   connect(frontTrail.frame_a, revolute.frame_b) annotation(
@@ -309,14 +337,34 @@ equation
     Line(points = {{-200, -20}, {-174, -20}, {-174, -22}}, color = {0, 0, 127}));
   connect(inputRearRightTorque, torqueRearRight.tau) annotation(
     Line(points = {{200, -20}, {172, -20}, {172, -10}}, color = {0, 0, 127}));
-// Connect output
-  connect(outActualSteeringAngle, angleSensor.phi);
+  connect(outActualSteeringAngle, neg2.y);
   connect(inputSteering, neg.u) annotation(
     Line(points = {{-200, 60}, {-150, 60}}, color = {0, 0, 127}));
-  connect(neg.y, position.phi_ref) annotation(
+  connect(neg.y, positionPhi.phi_ref) annotation(
     Line(points = {{-126, 60}, {-86, 60}}, color = {0, 0, 127}));
-  connect(position.flange, revolute.flange_a) annotation(
+  connect(positionPhi.flange, revolute.flange_a) annotation(
     Line(points = {{-64, 60}, {-2, 60}}));
+  connect(neg2.u, angleSensor.phi) annotation(
+    Line(points = {{-64, 90}, {-54, 90}}, color = {0, 0, 127}));
+  connect(rearLeftWheel.dynamicLoad, weightTransfer.y[2]) annotation(
+    Line(points = {{-52, -58}, {-54, -58}, {-54, -66}, {-72, -66}, {-72, 8}, {-76, 8}}, color = {0, 0, 127}));
+  connect(frontWheel.dynamicLoad, weightTransfer.y[1]) annotation(
+    Line(points = {{8, 114}, {-20, 114}, {-20, 8}, {-76, 8}}, color = {0, 0, 127}));
+  connect(rearRightWheel.dynamicLoad, weightTransfer.y[3]) annotation(
+    Line(points = {{58, -66}, {58, -72}, {-72, -72}, {-72, 8}, {-76, 8}}, color = {0, 0, 127}));
+  connect(outWeightTransfer,weightTransfer.y);
+  connect(frontWheel.outRollForce, frontRollResistance.force) annotation(
+    Line(points = {{0, 114}, {-6, 114}, {-6, 152}, {-14, 152}}, color = {0, 0, 127}, thickness = 0.5));
+  connect(frontRollResistance.frame_b, frontWheel.frame_a) annotation(
+    Line(points = {{8, 152}, {12, 152}, {12, 120}}, color = {95, 95, 95}));
+  connect(rearLeftWheel.outRollForce, rearLeftRollResistance.force) annotation(
+    Line(points = {{-62, -56}, {-62, -24}}, color = {0, 0, 127}, thickness = 0.5));
+  connect(rearRightWheel.outRollForce, rearRightRollResistance.force) annotation(
+    Line(points = {{68, -64}, {68, -24}}, color = {0, 0, 127}, thickness = 0.5));
+  connect(rearRightRollResistance.frame_b, rearRightWheel.frame_a) annotation(
+    Line(points = {{46, -24}, {54, -24}, {54, -56}}, color = {95, 95, 95}));
+  connect(rearLeftRollResistance.frame_b, rearLeftWheel.frame_a) annotation(
+    Line(points = {{-40, -24}, {-48, -24}, {-48, -48}}, color = {95, 95, 95}));
   annotation(
     Placement(visible = true, transformation(origin = {16, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)),
     uses(Modelica(version = "4.0.0"), PlanarMechanics(version = "1.6.0")),

@@ -83,8 +83,8 @@ equation
   f_lat = {frame_a.fy, -frame_a.fx}*e0;
   lossPower = f*v_slip;
   // Rolling resistance
-  f_roll = cr*fN*(2/(1 + Modelica.Math.exp(-v_long/(0.01*v0_roll)))-1);
-  outRollForce = f_roll * {sin(frame_a.phi), cos(frame_a.phi), 0};
+  f_roll = -cr*fN*(2/(1 + Modelica.Math.exp(-v_long/(0.01*v0_roll)))-1);
+  outRollForce = f_roll * {sin(-frame_a.phi), cos(frame_a.phi), 0};
   annotation(
     Documentation(info = "<html>
 <p>
