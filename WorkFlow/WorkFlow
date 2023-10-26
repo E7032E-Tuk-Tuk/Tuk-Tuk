@@ -16,6 +16,9 @@ Working on the 3-wheel model to prepare it to be exported as an FMU.
 Looking into wheel slip to understand how slip is implemented in the model of the wheels.
 -Emma // 2023-10-10
 
+Upgrading the model to contain rolling resistance and weight transfer. Writing about the upgrade in the report.
+-Emma // 2023-10-20
+
 
 ----Main Controll Unit----
 Setting up okdo x radxa rock 4 se 4gb. // 2023-09-18
