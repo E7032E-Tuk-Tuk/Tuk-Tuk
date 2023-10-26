@@ -9,12 +9,13 @@ rearTrackWidth = 1.0;
 Lf = 1.5; % Distance COM - front axle
 Lr = 0.5; % Distance COM - rear axle
 L = Lf + Lr; % Wheelbase
-h = 0.35; % Vertical distance COM - axle plane
+h = 0.2; % Height of COM
 
 gearRatio = 7;
 
 wheelRadius = 0.28;
 wheelIyy = 0.3;
+rollingResistanceCoeff = 0.0;
 
 c_f_nom = 12e3; % Front tires cornering stiffness (at nominal vertical load)
 c_r_nom = 15e3; % Rear tires cornering stiffness (at nominal vertical load)
