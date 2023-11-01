@@ -1,9 +1,9 @@
-model ThreeWheelVehicle2
+model ThreeWheelVehicleMechanicalDiff
   import PlanarMechanics;
   parameter Real g = 9.82 "m/s2 Gravity";
   // Wheel parameters
   parameter Real wheelRadius = 0.28 "m";
-  parameter Real inertiaWheel = 0.2;
+  parameter Real inertiaWheel = 0.3;
   parameter Real gearRatio = 1/8;
   parameter Real cr = 0.03 "Rolling resistance";
   // Vehicle parameters, be careful with mass center placement!
@@ -25,7 +25,7 @@ model ThreeWheelVehicle2
   parameter Real vAd = 0.1;
   parameter Real vSl = 0.3;
   // Other
-  parameter Real speedStart = 80/3.6 "m/s";
+  parameter Real speedStart = 40/3.6 "m/s";
   parameter Real omegaStart = speedStart/wheelRadius "rad/s";
   // Calculated values
   Real speed(start = speedStart) "m/s Car speed";
@@ -48,7 +48,7 @@ model ThreeWheelVehicle2
   Real slipAngleFrontWheel(start=0);
   Real slipAngleRearLeftWheel(start=0);
   Real slipAngleRearRightWheel(start=0);
-  parameter Real turnRadiusMAX = 1000;
+  parameter Real turnRadiusMAX = 500;
   Real turnRadiusOptimal(start=turnRadiusMAX);
   Real turnRadiusReal(start=turnRadiusMAX);
   // World
@@ -110,9 +110,7 @@ model ThreeWheelVehicle2
     w(fixed = true, start = omegaStart)) annotation(
     Placement(visible = true, transformation(origin = {-34, 120}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Sources.Torque torqueRearLeft annotation(
-    Placement(visible = true, transformation(origin = {-162, -22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Mechanics.Rotational.Sources.Torque torqueRearRight annotation(
-    Placement(visible = true, transformation(origin = {160, -10}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {-42, -126}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Components.IdealGear gearLeft(ratio = gearRatio)  annotation(
     Placement(visible = true, transformation(origin = {-132, -46}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Rotational.Components.IdealGear gearRight(ratio = gearRatio)  annotation(
@@ -174,15 +172,17 @@ model ThreeWheelVehicle2
     Placement(visible = true, transformation(origin = {56, -24}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   PlanarMechanics.Sources.WorldForce frontRollResistance annotation(
     Placement(visible = true, transformation(origin = {-2, 152}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Trapezoid trapezoid(amplitude = 1.8/180*3.14, falling = 4, offset = -0.9/180*3.14, period = 60, rising = 4, width = 22)  annotation(
+  Modelica.Blocks.Sources.Trapezoid trapezoid(amplitude = 8/180*3.14, falling = 4, offset = -4/180*3.14, period = 60, rising = 4, width = 22)  annotation(
     Placement(visible = true, transformation(origin = {-104, 44}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const(k = 10)  annotation(
-    Placement(visible = true, transformation(origin = {-204, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Sources.Constant const(k = 20)  annotation(
+    Placement(visible = true, transformation(origin = {-88, -130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  PlanarMechanics.VehicleComponents.DifferentialGear differentialGear annotation(
+    Placement(visible = true, transformation(origin = {-14, -92}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   speed = sqrt(body.v[1]^2 + body.v[2]^2);
   S = abs(body.r[1]) + abs(body.r[2]);
-  Pleft = rearLeftWheel.w_roll*torqueRearLeft.tau;
-  Pright = rearRightWheel.w_roll*torqueRearRight.tau;
+  Pleft = rearLeftWheel.w_roll*differentialGear.flange_left.tau;
+  Pright = rearRightWheel.w_roll*differentialGear.flange_right.tau;
 // Car frame equations
   Trot = [-sin(body.phi), cos(body.phi); cos(body.phi), sin(body.phi)];
   v_car = Trot*body.v;
@@ -234,10 +234,6 @@ equation
     Line(points = {{8, 50}, {8, 42}, {22, 42}, {22, 38}}, color = {95, 95, 95}));
   connect(front.frame_b, front2.frame_b) annotation(
     Line(points = {{-8, 34}, {-8, 40}, {2, 40}, {2, 38}}, color = {95, 95, 95}));
-  connect(torqueRearRight.flange, gearRight.flange_a) annotation(
-    Line(points = {{150, -10}, {134, -10}, {134, -58}}));
-  connect(torqueRearLeft.flange, gearLeft.flange_a) annotation(
-    Line(points = {{-152, -22}, {-142, -22}, {-142, -46}}));
   connect(gearLeft.flange_b, rearLeftInertia.flange_a) annotation(
     Line(points = {{-122, -46}, {-106, -46}, {-106, -48}}));
   connect(rearLeftInertia.flange_b, rearLeftWheel.flange_a) annotation(
@@ -270,13 +266,17 @@ equation
     Line(points = {{58, -66}, {-150, -66}, {-150, 28}}, color = {0, 0, 127}));
   connect(position.phi_ref, trapezoid.y) annotation(
     Line(points = {{-60, 54}, {-92, 54}, {-92, 44}}, color = {0, 0, 127}));
+  connect(torqueRearLeft.flange, differentialGear.flange_b) annotation(
+    Line(points = {{-32, -126}, {-14, -126}, {-14, -102}}));
+  connect(differentialGear.flange_left, gearLeft.flange_a) annotation(
+    Line(points = {{-24, -92}, {-160, -92}, {-160, -46}, {-142, -46}}));
+  connect(differentialGear.flange_right, gearRight.flange_a) annotation(
+    Line(points = {{-4, -92}, {146, -92}, {146, -58}, {134, -58}}));
   connect(const.y, torqueRearLeft.tau) annotation(
-    Line(points = {{-192, -30}, {-174, -30}, {-174, -22}}, color = {0, 0, 127}));
-  connect(const.y, torqueRearRight.tau) annotation(
-    Line(points = {{-192, -30}, {-182, -30}, {-182, -74}, {172, -74}, {172, -10}}, color = {0, 0, 127}));
+    Line(points = {{-76, -130}, {-54, -130}, {-54, -126}}, color = {0, 0, 127}));
   annotation(
     Placement(visible = true, transformation(origin = {16, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)),
     uses(Modelica(version = "4.0.0"), PlanarMechanics(version = "1.6.0")),
     Diagram(coordinateSystem(extent = {{-220, 160}, {220, -80}})),
     version = "");
-end ThreeWheelVehicle2;
+end ThreeWheelVehicleMechanicalDiff;
