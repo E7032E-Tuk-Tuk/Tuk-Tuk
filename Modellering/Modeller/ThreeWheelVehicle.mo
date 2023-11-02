@@ -25,7 +25,7 @@ model ThreeWheelVehicle2
   parameter Real vAd = 0.1;
   parameter Real vSl = 0.3;
   // Other
-  parameter Real speedStart = 80/3.6 "m/s";
+  parameter Real speedStart = 50/3.6 "m/s";
   parameter Real omegaStart = speedStart/wheelRadius "rad/s";
   // Calculated values
   Real speed(start = speedStart) "m/s Car speed";
@@ -176,7 +176,7 @@ model ThreeWheelVehicle2
     Placement(visible = true, transformation(origin = {-2, 152}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Trapezoid trapezoid(amplitude = 1.8/180*3.14, falling = 4, offset = -0.9/180*3.14, period = 60, rising = 4, width = 22)  annotation(
     Placement(visible = true, transformation(origin = {-104, 44}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant const(k = 10)  annotation(
+  Modelica.Blocks.Sources.Constant const(k = 70)  annotation(
     Placement(visible = true, transformation(origin = {-204, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   speed = sqrt(body.v[1]^2 + body.v[2]^2);
