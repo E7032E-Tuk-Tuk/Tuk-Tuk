@@ -1,0 +1,2 @@
+https://dongilc.gitbook.io/openrobot-inc/tutorials/control-with-can#reference-1-electric-skateboard.builders-vesc-can-message-structure
+https://github.com/craigg96/vesc_can_bus_arduino
