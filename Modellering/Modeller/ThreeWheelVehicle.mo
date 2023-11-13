@@ -168,16 +168,16 @@ model ThreeWheelVehicle2
   // Signal sources
   Modelica.Mechanics.Rotational.Sources.Position position(exact = true)  annotation(
     Placement(visible = true, transformation(origin = {-48, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  PlanarMechanics.Sources.WorldForce rearLeftRollResistance annotation(
-    Placement(visible = true, transformation(origin = {-62, -16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  PlanarMechanics.Sources.WorldForce rearRightRollResistance annotation(
-    Placement(visible = true, transformation(origin = {56, -24}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
-  PlanarMechanics.Sources.WorldForce frontRollResistance annotation(
-    Placement(visible = true, transformation(origin = {-2, 152}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Trapezoid trapezoid(amplitude = 1.8/180*3.14, falling = 4, offset = -0.9/180*3.14, period = 60, rising = 4, width = 22)  annotation(
-    Placement(visible = true, transformation(origin = {-104, 44}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Blocks.Sources.Constant const(k = 70)  annotation(
     Placement(visible = true, transformation(origin = {-204, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  SineWithDwell sineWithDwell(amplitude = .05, f = 0.7)  annotation(
+    Placement(visible = true, transformation(origin = {-96, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Mechanics.Rotational.Sources.Torque rearLeftRollResistance annotation(
+    Placement(visible = true, transformation(origin = {-66, -18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Mechanics.Rotational.Sources.Torque rearRightRollingResistance annotation(
+    Placement(visible = true, transformation(origin = {60, -16}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+  Modelica.Mechanics.Rotational.Sources.Torque frontRollingResistance annotation(
+    Placement(visible = true, transformation(origin = {-6, 154}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   speed = sqrt(body.v[1]^2 + body.v[2]^2);
   S = abs(body.r[1]) + abs(body.r[2]);
@@ -250,30 +250,30 @@ equation
     Line(points = {{62, 42}, {54, 42}, {54, 16}}, color = {95, 95, 95}));
   connect(position.flange, revolute.flange_a) annotation(
     Line(points = {{-38, 54}, {-2, 54}, {-2, 60}}));
-  connect(rearLeftWheel.outRollForce, rearLeftRollResistance.force) annotation(
-    Line(points = {{-62, -56}, {-74, -56}, {-74, -16}}, color = {0, 0, 127}));
-  connect(rearLeftRollResistance.frame_b, rearLeftWheel.frame_a) annotation(
-    Line(points = {{-52, -16}, {-48, -16}, {-48, -48}}));
-  connect(rearRightWheel.outRollForce, rearRightRollResistance.force) annotation(
-    Line(points = {{68, -64}, {68, -24}}, color = {0, 0, 127}));
-  connect(rearRightRollResistance.frame_b, rearRightWheel.frame_a) annotation(
-    Line(points = {{46, -24}, {54, -24}, {54, -56}}, color = {95, 95, 95}));
-  connect(frontWheel.outRollForce, frontRollResistance.force) annotation(
-    Line(points = {{-8, 112}, {-14, 112}, {-14, 152}}, color = {0, 0, 127}));
-  connect(frontRollResistance.frame_b, frontWheel.frame_a) annotation(
-    Line(points = {{8, 152}, {6, 152}, {6, 120}}));
   connect(frontWheel.dynamicLoad, weightTransfer.y[1]) annotation(
     Line(points = {{2, 110}, {-150, 110}, {-150, 28}}, color = {0, 0, 127}));
   connect(rearLeftWheel.dynamicLoad, weightTransfer.y[2]) annotation(
     Line(points = {{-52, -58}, {-150, -58}, {-150, 28}}, color = {0, 0, 127}));
   connect(rearRightWheel.dynamicLoad, weightTransfer.y[3]) annotation(
     Line(points = {{58, -66}, {-150, -66}, {-150, 28}}, color = {0, 0, 127}));
-  connect(position.phi_ref, trapezoid.y) annotation(
-    Line(points = {{-60, 54}, {-92, 54}, {-92, 44}}, color = {0, 0, 127}));
   connect(const.y, torqueRearLeft.tau) annotation(
     Line(points = {{-192, -30}, {-174, -30}, {-174, -22}}, color = {0, 0, 127}));
   connect(const.y, torqueRearRight.tau) annotation(
     Line(points = {{-192, -30}, {-182, -30}, {-182, -74}, {172, -74}, {172, -10}}, color = {0, 0, 127}));
+  connect(sineWithDwell.y, position.phi_ref) annotation(
+    Line(points = {{-84, 54}, {-60, 54}}, color = {0, 0, 127}));
+  connect(rearLeftWheel.outRollTorque, rearLeftRollResistance.tau) annotation(
+    Line(points = {{-62, -56}, {-78, -56}, {-78, -18}}, color = {0, 0, 127}));
+  connect(rearLeftRollResistance.flange, rearLeftWheel.flange_a) annotation(
+    Line(points = {{-56, -18}, {-62, -18}, {-62, -48}}));
+  connect(rearRightWheel.outRollTorque, rearRightRollingResistance.tau) annotation(
+    Line(points = {{68, -64}, {72, -64}, {72, -16}}, color = {0, 0, 127}));
+  connect(rearRightRollingResistance.flange, rearRightWheel.flange_a) annotation(
+    Line(points = {{50, -16}, {50, -37}, {68, -37}, {68, -56}}));
+  connect(frontWheel.outRollTorque, frontRollingResistance.tau) annotation(
+    Line(points = {{-8, 112}, {-18, 112}, {-18, 154}}, color = {0, 0, 127}));
+  connect(frontRollingResistance.flange, frontWheel.flange_a) annotation(
+    Line(points = {{4, 154}, {-8, 154}, {-8, 120}}));
   annotation(
     Placement(visible = true, transformation(origin = {16, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)),
     uses(Modelica(version = "4.0.0"), PlanarMechanics(version = "1.6.0")),

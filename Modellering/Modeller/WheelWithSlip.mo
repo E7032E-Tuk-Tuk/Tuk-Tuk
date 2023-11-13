@@ -42,6 +42,7 @@ model WheelWithSlip "Slip-Friction based wheel joint"
   Modelica.Units.SI.Velocity vAdhesion "Adhesion velocity";
   Modelica.Units.SI.Velocity vSlide "Sliding velocity";
   Modelica.Units.SI.Force f_roll "Rolling resistance";
+  Modelica.Units.SI.Torque torque_roll "Rolling torque resistance";
   parameter Real cr "Rolling resistance constant";
   parameter Modelica.Units.SI.Velocity v0_roll(final min=Modelica.Constants.eps)=0.1
     "Regularization below v0";
@@ -58,7 +59,7 @@ model WheelWithSlip "Slip-Friction based wheel joint"
   Modelica.Mechanics.MultiBody.Visualizers.Advanced.Shape cylinder(shapeType = "cylinder", color = {63, 63, 63}, specularCoefficient = specularCoefficient, length = width, width = radius*2, height = radius*2, lengthDirection = {-e0[2], e0[1], 0}, widthDirection = {0, 0, 1}, r_shape = -0.03*{-e0[2], e0[1], 0}, r = Modelica.Mechanics.MultiBody.Frames.resolve1(planarWorld.R, {frame_a.x, frame_a.y, zPosition}) + planarWorld.r_0, R = planarWorld.R) if planarWorld.enableAnimation and animate;
   Modelica.Mechanics.MultiBody.Visualizers.Advanced.Shape rim1(shapeType = "cylinder", color = {195, 195, 195}, specularCoefficient = specularCoefficient, length = radius*2, width = diameter, height = diameter, lengthDirection = {0, 0, 1}, widthDirection = {1, 0, 0}, r_shape = {0, 0, -radius}, r = Modelica.Mechanics.MultiBody.Frames.resolve1(planarWorld.R, {frame_a.x, frame_a.y, zPosition}) + planarWorld.r_0, R = Modelica.Mechanics.MultiBody.Frames.absoluteRotation(planarWorld.R, Modelica.Mechanics.MultiBody.Frames.planarRotation({-e0[2], e0[1], 0}, flange_a.phi, 0))) if planarWorld.enableAnimation and animate;
   Modelica.Mechanics.MultiBody.Visualizers.Advanced.Shape rim2(shapeType = "cylinder", color = {195, 195, 195}, specularCoefficient = specularCoefficient, length = radius*2, width = diameter, height = diameter, lengthDirection = {0, 0, 1}, widthDirection = {1, 0, 0}, r_shape = {0, 0, -radius}, r = Modelica.Mechanics.MultiBody.Frames.resolve1(planarWorld.R, {frame_a.x, frame_a.y, zPosition}) + planarWorld.r_0, R = Modelica.Mechanics.MultiBody.Frames.absoluteRotation(planarWorld.R, Modelica.Mechanics.MultiBody.Frames.planarRotation({-e0[2], e0[1], 0}, flange_a.phi + Modelica.Constants.pi/2, 0))) if planarWorld.enableAnimation and animate;
-  Modelica.Blocks.Interfaces.RealOutput outRollForce[3] annotation(
+  Modelica.Blocks.Interfaces.RealOutput outRollTorque annotation(
     Placement(visible = true, transformation(origin = {0, 100}, extent = {{-10, -10}, {10, 10}}, rotation = 90), iconTransformation(origin = {100, -90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   R = {{cos(frame_a.phi), -sin(frame_a.phi)}, {sin(frame_a.phi), cos(frame_a.phi)}};
@@ -84,7 +85,8 @@ equation
   lossPower = f*v_slip;
   // Rolling resistance
   f_roll = -cr*fN*(2/(1 + Modelica.Math.exp(-v_long/(0.01*v0_roll)))-1);
-  outRollForce = f_roll * {sin(-frame_a.phi), cos(frame_a.phi), 0};
+  torque_roll = f_roll*radius;
+  outRollTorque = torque_roll;
   annotation(
     Documentation(info = "<html>
 <p>
