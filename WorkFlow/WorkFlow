@@ -71,6 +71,9 @@ Started writting about motor drivers in the report // 2023-09-21
 Reading about motor configuration (star or delta), how to choose with transistor is on (switching scheme) and what the frequency of the PWM should be. // 20203-11-16
 - Samuel
 
+Downloaded a motor model with a torque contoller to examine how to drive the motor // 2023-11-23
+- Samuel // Two hours.
+
 ----Torque Vectoring controller----
 Continued reading resources (papers etc) on Torque Vectoring in order to clear up some details and decide on the most viable implementation for the project.
 - Magnus // Week 37
