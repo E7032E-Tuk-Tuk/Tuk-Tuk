@@ -1,3 +1,18 @@
+                 THIS DOCUMENT WILL NOW BE SORTED BY THE WEEK THE TASK GOT DONE, NOT THE SUBJECT OF THE TASK
+
+----Week 48----
+
+Played around with the torque controller model that I downloaded last week. Now have a sense
+of what is in a troque controller for a BLDC motor. No luck in finding how the switching is 
+done effiecently.
+- Samuel // 2023-11-28 13:00-15:30
+
+Finally found how the switching scheme is designed and how to implement it in a efficient manner.
+Haven't written about it in the report yet.
+- Samuel // 2023-11-29 13:26-16:58
+
+
+
 ----Simulation Modelica----
 Finding model of car-wheel with slip implemented. Practice simulating with modelica. 
 Testing different dimensions (1D-3D) but found 2D modeling with library PlanarMechanics is the simpliest 
