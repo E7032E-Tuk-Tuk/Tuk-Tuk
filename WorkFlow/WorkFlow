@@ -114,6 +114,9 @@ Had a meeting with Khalid to discuss control architecture
 Combined the Modelica FMU with the yaw-rate controller in Simulink. It was almost working, but the steering angle is internally controlled by a PI in the FMU which caused nasty oscillations. Should either find a quick fix or resort to using Vehicle Dynamics Blockset for now.
 - Magnus // Week 41
 
+Forgot to update this document. An exam period a few weeks ago led to a slowdown in the project. Otherwise mostly been working back and forth with Emma to request additional functionality in the FMU, and implemented the updated FMUs in Simulink. Tested various simulation scenarios and vehicle parameters. Writing about vehicle dynamics in the report.
+- Magnus // Weeks 42-48
+
 ----Platform----
 Made a sketch for the diffrent forces on the car and looked into the EOM (Equations of Motion) 2023-08-23
 -Alex
