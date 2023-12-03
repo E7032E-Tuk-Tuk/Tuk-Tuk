@@ -120,6 +120,9 @@ Forgot to update this document. An exam period a while back led to a slowdown in
 Added a scenario to test the longitudinal behaviour of the simulated vehicle. Resulted in a "mu-slip curve" which looks about right.
 - Magnus // Week 48
 
+Also plotted the lateral force on the front wheel as a function of the slip angle.
+- Magnus // Week 48
+
 ----Platform----
 Made a sketch for the diffrent forces on the car and looked into the EOM (Equations of Motion) 2023-08-23
 -Alex
