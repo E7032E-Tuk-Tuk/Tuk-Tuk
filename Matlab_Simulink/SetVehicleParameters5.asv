@@ -2,7 +2,7 @@ g = 9.8;
 dragCoeff = 0.5;
 
 mass = 420;
-Izz = 150; % Yaw moment of inertia
+Izz = 200; % Yaw moment of inertia
 
 frontTrackWidth = 1.0;
 rearTrackWidth = 1.0;
