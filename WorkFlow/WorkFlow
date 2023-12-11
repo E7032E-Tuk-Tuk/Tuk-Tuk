@@ -1,11 +1,18 @@
-                 THIS DOCUMENT WILL NOW BE SORTED BY THE WEEK THE TASK GOT DONE, NOT THE SUBJECT OF THE TASK
+THIS DOCUMENT WILL NOW BE SORTED BY THE WEEK THE TASK GOT DONE, NOT THE SUBJECT OF THE TASK
+----Week 50----
+
+Wrote on the report, 2 meetings, working on implementing gyro :)
+- Jack 2023-12-11 (08-1830)
+
+
 
 ----Week 49----
 
 Written in the report about Modelica and FMI
 - Emma // 2023-12-05
 
-
+Fixed sending and recieving extended IDs over CAN bus
+Jack, Jim 2023-12-04
 
 ----Week 48----
 
