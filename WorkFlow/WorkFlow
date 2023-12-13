@@ -4,7 +4,8 @@ THIS DOCUMENT WILL NOW BE SORTED BY THE WEEK THE TASK GOT DONE, NOT THE SUBJECT 
 Wrote on the report, 2 meetings, working on implementing gyro :)
 - Jack 2023-12-11 (08-1830)
 
-
+Implemented the TV controller in vanilla C (like it's 1972...)
+- Magnus
 
 ----Week 49----
 
@@ -13,6 +14,9 @@ Written in the report about Modelica and FMI
 
 Fixed sending and recieving extended IDs over CAN bus
 Jack, Jim 2023-12-04
+
+Added an experimental anti-spin feature to the controller
+- Magnus // Week 49
 
 ----Week 48----
 
@@ -30,7 +34,14 @@ The pidTuner app in Matlab can be good to use, where a state-space estimation ca
 This model can then be pre-tuned in Matlab before tested on the Tuk-Tuk.
 - Emma // 2023-12-01
 
+Added a scenario to test the longitudinal behaviour of the simulated vehicle. Resulted in a "mu-slip curve" which looks about right.
+- Magnus // Week 48
 
+Also plotted the lateral force on the front wheel as a function of the slip angle.
+- Magnus // Week 48
+
+Writing about Vehicle Dynamics in the report
+- Magnus // Week 48
 
 ----Simulation Modelica----
 Finding model of car-wheel with slip implemented. Practice simulating with modelica. 
