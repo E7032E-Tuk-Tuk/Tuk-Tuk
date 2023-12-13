@@ -117,7 +117,7 @@ void yawRateController()
 void torqueVectoring()
 {
 	// Determine differential mode torque
-	void torqueDM = WheelRadiusLoaded * yawTorqueRef / (GearRatio * TrackWidth);
+	float torqueDM = WheelRadiusLoaded * yawTorqueRef / (GearRatio * TrackWidth);
 	
 	motorTorqueLeftRef = torqueCM + torqueDM; // NOTE: This assumes that the yaw angle is defined in a clockwise sense; otherwise, flip the signs
 	motorTorqueRightRef = torqueCM - torqueDM;
