@@ -1,3 +1,48 @@
+THIS DOCUMENT WILL NOW BE SORTED BY THE WEEK THE TASK GOT DONE, NOT THE SUBJECT OF THE TASK
+----Week 50----
+
+Wrote on the report, 2 meetings, working on implementing gyro :)
+- Jack 2023-12-11 (08-1830)
+
+Implemented the TV controller in vanilla C (like it's 1972...)
+- Magnus
+
+----Week 49----
+
+Written in the report about Modelica and FMI
+- Emma // 2023-12-05
+
+Fixed sending and recieving extended IDs over CAN bus
+Jack, Jim 2023-12-04
+
+Added an experimental anti-spin feature to the controller
+- Magnus // Week 49
+
+----Week 48----
+
+Played around with the torque controller model that I downloaded last week. Now have a sense
+of what is in a troque controller for a BLDC motor. No luck in finding how the switching is 
+done effiecently.
+- Samuel // 2023-11-28 13:00-15:30
+
+Finally found how the switching scheme is designed and how to implement it in a efficient manner.
+Haven't written about it in the report yet.
+- Samuel // 2023-11-29 13:26-16:58
+
+Looking into ways of tuning the PID-controller when it is on the Tuk-Tuk. Found that the most conventional methods didn't work.
+The pidTuner app in Matlab can be good to use, where a state-space estimation can be made from measured input-output data. 
+This model can then be pre-tuned in Matlab before tested on the Tuk-Tuk.
+- Emma // 2023-12-01
+
+Added a scenario to test the longitudinal behaviour of the simulated vehicle. Resulted in a "mu-slip curve" which looks about right.
+- Magnus // Week 48
+
+Also plotted the lateral force on the front wheel as a function of the slip angle.
+- Magnus // Week 48
+
+Writing about Vehicle Dynamics in the report
+- Magnus // Week 48
+
 ----Simulation Modelica----
 Finding model of car-wheel with slip implemented. Practice simulating with modelica. 
 Testing different dimensions (1D-3D) but found 2D modeling with library PlanarMechanics is the simpliest 
@@ -98,6 +143,18 @@ Had a meeting with Khalid to discuss control architecture
 
 Combined the Modelica FMU with the yaw-rate controller in Simulink. It was almost working, but the steering angle is internally controlled by a PI in the FMU which caused nasty oscillations. Should either find a quick fix or resort to using Vehicle Dynamics Blockset for now.
 - Magnus // Week 41
+
+Forgot to update this document. An exam period a while back led to a slowdown in the project. Otherwise mostly been working back and forth with Emma to request additional functionality in the FMU, and implemented the updated FMUs in Simulink. Tested various simulation scenarios and vehicle parameters. Writing about vehicle dynamics in the report.
+- Magnus // Weeks 42-48
+
+Added a scenario to test the longitudinal behaviour of the simulated vehicle. Resulted in a "mu-slip curve" which looks about right.
+- Magnus // Week 48
+
+Also plotted the lateral force on the front wheel as a function of the slip angle.
+- Magnus // Week 48
+
+Added an experimental anti-spin feature to the controller
+- Magnus // Week 49
 
 ----Platform----
 Made a sketch for the diffrent forces on the car and looked into the EOM (Equations of Motion) 2023-08-23
