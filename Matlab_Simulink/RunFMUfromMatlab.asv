@@ -1,0 +1,19 @@
+%% Simulate the FMU
+
+% RunFMUfromMatlabFMU
+
+inSteering = .1;
+inTorqueLeft = 10;
+inTorqueRight = 10;
+
+% Solver settings
+T = .01;
+options = simset('solver', 'ode45', 'Ou', T);
+time = 0:T:10;
+
+
+% Simulate
+for i = 1:length(time)
+    % Run simulation for the current time step
+    sim("RunFMUfromMatlabFMU.slx", options, 'StartTime', time(i), 'EndTime', time(i+1));
+end
