@@ -37,7 +37,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-#define UART_RX_BUFFER_SIZE 24
+#define UART_RX_BUFFER_SIZE 8
 #define UART_TX_BUFFER_SIZE 12
 /* USER CODE END PM */
 
@@ -62,7 +62,8 @@ static void MX_USART2_UART_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_ADC2_Init(void);
 /* USER CODE BEGIN PFP */
-
+void SIM_set_torques(uint8_t *Tx_data, float torqueLeft, float torqueRight);
+void SIM_set_steering_angle(uint8_t *Tx_data, float steeringAngle);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -70,6 +71,9 @@ static void MX_ADC2_Init(void);
 
 uint8_t UART_Rx_data[UART_RX_BUFFER_SIZE]; // UART receive data buffer.
 uint8_t UART_Tx_data[UART_TX_BUFFER_SIZE]; // UART transive data buffer.
+
+uint32_t val_adc1; // Values from potentiometer controlling the torque.
+uint32_t val_adc2; // Values from potentiometer controlling the steering angle.
 
 /*
  * HAL_UART_RxCpltCallback
@@ -82,7 +86,27 @@ uint8_t UART_Tx_data[UART_TX_BUFFER_SIZE]; // UART transive data buffer.
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	HAL_UART_Receive_IT(&huart2, UART_Rx_data, UART_RX_BUFFER_SIZE);
-	HAL_UART_Transmit(&huart2, UART_Rx_data, sizeof(UART_Rx_data), 2);
+	HAL_UART_Transmit(&huart2, UART_Tx_data, sizeof(UART_Tx_data), 2);
+}
+
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+{
+	if (hadc == &hadc1)
+	{
+		val_adc1 = HAL_ADC_GetValue(&hadc1);
+
+		float torque = (float) val_adc1*20/4095;
+		SIM_set_torques(UART_Tx_data, torque, torque);
+	}
+
+	if (hadc == &hadc2)
+	{
+	  val_adc2 = HAL_ADC_GetValue(&hadc2);
+
+	  float steeringAngle = (float) val_adc2*60/4095 - 30;
+	  SIM_set_steering_angle(UART_Tx_data, steeringAngle);
+	}
 }
 /* USER CODE END 0 */
 
@@ -122,24 +146,21 @@ int main(void)
   MX_ADC1_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
-  int val_adc1;
-  int val_adc2;
+
+  float torque;
+  float steeringAngle;
+
+  HAL_UART_Receive_IT(&huart2, UART_Rx_data, UART_RX_BUFFER_SIZE);
+  HAL_ADC_Start_IT(&hadc1);
+  HAL_ADC_Start_IT(&hadc2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  // Get value from adc 1. Spanning from 0 to 4095.
-	  	  HAL_ADC_Start(&hadc1); // pin A5
-	  	  HAL_ADC_PollForConversion(&hadc1, 1);
-	  	  val_adc1 = HAL_ADC_GetValue(&hadc1);
 
-
-	  	  // Get value from adc 2. Spanning from 0 to 4095.
-	  	  HAL_ADC_Start(&hadc2); // pin A6
-	  	  HAL_ADC_PollForConversion(&hadc2, 1);
-	  	  val_adc2 = HAL_ADC_GetValue(&hadc2);
 
     /* USER CODE END WHILE */
 
@@ -473,8 +494,8 @@ void SIM_set_torques(uint8_t *Tx_data, float torqueLeft, float torqueRight)
     // Puts the values into Tx buffer.
 	for (int i = 0; i < 4; i++)
 	{
-		*(Tx_data + i) 		= (uint8_t) (tempLeft >> (12 - 4*i)) & bitmask;
-		*(Tx_data + 4 + i) 	= (uint8_t) (tempRight >> (12 - 4*i)) & bitmask;
+		*(Tx_data + i) 		= (uint8_t) (tempLeft >> (24 - 8*i)) & bitmask;
+		*(Tx_data + 4 + i) 	= (uint8_t) (tempRight >> (24 - 8*i)) & bitmask;
 	}
 }
 
@@ -498,7 +519,7 @@ void SIM_set_steering_angle(uint8_t *Tx_data, float steeringAngle)
 
 	for (int i = 0; i < 4; i++)
 	{
-		*(Tx_data + 8 + i) 		= (uint8_t) (tempSteer >> (12 - 4*i)) & bitmask;
+		*(Tx_data + 8 + i) 		= (uint8_t) (tempSteer >> (24 - 8*i)) & bitmask;
 	}
 }
 
