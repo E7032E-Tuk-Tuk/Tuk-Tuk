@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -72,8 +73,10 @@ void SIM_set_steering_angle(uint8_t *Tx_data, float steeringAngle);
 uint8_t UART_Rx_data[UART_RX_BUFFER_SIZE]; // UART receive data buffer.
 uint8_t UART_Tx_data[UART_TX_BUFFER_SIZE]; // UART transive data buffer.
 
-uint32_t val_adc1; // Values from potentiometer controlling the torque.
-uint32_t val_adc2; // Values from potentiometer controlling the steering angle.
+uint32_t adc1_value; // Values from potentiometer controlling the torque.
+uint8_t adc1_valid = 0;
+uint32_t adc2_value; // Values from potentiometer controlling the steering angle.
+uint8_t adc2_valid = 0;
 
 /*
  * HAL_UART_RxCpltCallback
@@ -86,26 +89,27 @@ uint32_t val_adc2; // Values from potentiometer controlling the steering angle.
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	HAL_UART_Receive_IT(&huart2, UART_Rx_data, UART_RX_BUFFER_SIZE);
-	HAL_UART_Transmit(&huart2, UART_Tx_data, sizeof(UART_Tx_data), 2);
+	HAL_UART_Transmit_IT(&huart2, UART_Tx_data, sizeof(UART_Tx_data));
 }
 
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+}
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	if (hadc == &hadc1)
 	{
-		val_adc1 = HAL_ADC_GetValue(&hadc1);
-
-		float torque = (float) val_adc1*20/4095;
-		SIM_set_torques(UART_Tx_data, torque, torque);
+		adc1_value = HAL_ADC_GetValue(&hadc1);
+		adc1_valid = 1;
 	}
 
 	if (hadc == &hadc2)
 	{
-	  val_adc2 = HAL_ADC_GetValue(&hadc2);
-
-	  float steeringAngle = (float) val_adc2*60/4095 - 30;
-	  SIM_set_steering_angle(UART_Tx_data, steeringAngle);
+		adc2_value = HAL_ADC_GetValue(&hadc2);
+		adc2_valid = 1	;
 	}
 }
 /* USER CODE END 0 */
@@ -146,11 +150,17 @@ int main(void)
   MX_ADC1_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
-
   float torque;
+  float const torqueMax = 200;
+  float const torqueMin = 0;
+
   float steeringAngle;
+  float const steeringAngleMax = 30;
+  float const steeringAngleMin = -30;
+
 
   HAL_UART_Receive_IT(&huart2, UART_Rx_data, UART_RX_BUFFER_SIZE);
+  HAL_UART_Transmit_IT(&huart2, UART_Tx_data, sizeof(UART_Tx_data));
   HAL_ADC_Start_IT(&hadc1);
   HAL_ADC_Start_IT(&hadc2);
 
@@ -160,8 +170,28 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if (adc1_valid == 1)
+	  {
+		  torque = (float) adc1_value * (torqueMax - torqueMin)/4095 + torqueMin;
+		  SIM_set_torques(UART_Tx_data, torque, torque);
+
+		  adc1_valid = 0;
+		  HAL_ADC_Start_IT(&hadc1);
+	  }
+
+	  if (adc2_valid == 1)
+	  {
+		  steeringAngle = (float) adc2_value*(steeringAngleMax - steeringAngleMin)/4095 + steeringAngleMin;
+		  SIM_set_steering_angle(UART_Tx_data, steeringAngle);
+
+		  adc2_valid = 0;
+		  HAL_ADC_Start_IT(&hadc2);
+
+	  }
 
 
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+	  HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -472,13 +502,13 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /*
- * Sim_set_torque_right
+ * Sim_set_torques
  *
  * @brief	Putes the requested torques into UART Tx buffer.
  *
  * @param 	uint8_t *Tx_data UART transmission buffer.
- * 			float torqueLeft Reference torque for left wheel.
- * 			float torqueRight Reference torque for right wheel.
+ * @param	float torqueLeft Reference torque for left wheel.
+ * @param	float torqueRight Reference torque for right wheel.
  *
  * 	@retval None
  */
@@ -491,26 +521,28 @@ void SIM_set_torques(uint8_t *Tx_data, float torqueLeft, float torqueRight)
 	uint32_t tempLeft = * (uint32_t *) &torqueLeft;
 	uint32_t tempRight = * (uint32_t *) &torqueRight;
 
-    // Puts the values into Tx buffer.
+    // Puts the values into temp buffer.
 	for (int i = 0; i < 4; i++)
 	{
 		*(Tx_data + i) 		= (uint8_t) (tempLeft >> (24 - 8*i)) & bitmask;
 		*(Tx_data + 4 + i) 	= (uint8_t) (tempRight >> (24 - 8*i)) & bitmask;
 	}
+
 }
 
 /*
- * Sim_set_torque_right
+ * SIM_set_steering_angle
  *
  * @brief	Putes the requested torques into UART Tx buffer.
  *
  * @param 	uint8_t *Tx_data UART transmission buffer.
- * 			float torqueSteer steering angle.
+ * @param	float steeringAngle steering angle.
  *
  * 	@retval None
  */
 void SIM_set_steering_angle(uint8_t *Tx_data, float steeringAngle)
 {
+
 	// bitmask for extracting 1 byte at the time
 	uint8_t bitmask = 0xff;
 
@@ -519,8 +551,9 @@ void SIM_set_steering_angle(uint8_t *Tx_data, float steeringAngle)
 
 	for (int i = 0; i < 4; i++)
 	{
-		*(Tx_data + 8 + i) 		= (uint8_t) (tempSteer >> (24 - 8*i)) & bitmask;
+		*(Tx_data + 8 + i) 	= (uint8_t) (tempSteer >> (24 - 8*i)) & bitmask;
 	}
+
 }
 
 /* USER CODE END 4 */
