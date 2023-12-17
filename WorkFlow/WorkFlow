@@ -10,7 +10,7 @@ Implemented the TV controller in vanilla C (like it's 1972...)
 Worked on accelerometer and gyro
 -Jack 2023-12-16 (15-2030)
 
-Getting values for the acceleration and location from the ICM20948 (maybe working as intended)
+Getting values for the acceleration and gyro from the ICM20948, will do some report aswell
 - Jack 2023-12-17 (13-18)
 
 ----Week 49----
