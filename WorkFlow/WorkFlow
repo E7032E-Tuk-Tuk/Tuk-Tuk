@@ -7,6 +7,12 @@ Wrote on the report, 2 meetings, working on implementing gyro :)
 Implemented the TV controller in vanilla C (like it's 1972...)
 - Magnus
 
+Worked on accelerometer and gyro
+-Jack 2023-12-16 (15-2030)
+
+Getting values for the acceleration and location from the ICM20948 (maybe working as intended)
+- Jack 2023-12-17 (13-18)
+
 ----Week 49----
 
 Written in the report about Modelica and FMI
